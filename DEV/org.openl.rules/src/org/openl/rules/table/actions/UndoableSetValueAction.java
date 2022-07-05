@@ -11,7 +11,6 @@ import org.openl.rules.table.IWritableGrid;
 import org.openl.types.IOpenClass;
 import org.openl.types.java.JavaOpenClass;
 import org.openl.util.ClassUtils;
-import org.openl.util.StringUtils;
 
 /**
  * @author snshor
@@ -31,7 +30,6 @@ public class UndoableSetValueAction extends AUndoableCellAction {
 
         ICell cell = grid.getCell(getCol(), getRow());
         setPrevValue(cell.getObjectValue());
-        setPrevFormula(cell.getFormula());
         setPrevMetaInfo(metaInfoWriter.getMetaInfo(getRow(), getCol()));
 
         grid.setCellValue(getCol(), getRow(), newValue);
@@ -45,11 +43,7 @@ public class UndoableSetValueAction extends AUndoableCellAction {
     @Override
     public void undoAction(IGridTable table) {
         IWritableGrid grid = (IWritableGrid) table.getGrid();
-        if (StringUtils.isNotBlank(getPrevFormula())) {
-            grid.setCellFormula(getCol(), getRow(), getPrevFormula());
-        } else {
-            grid.setCellValue(getCol(), getRow(), getPrevValue());
-        }
+        grid.setCellValue(getCol(), getRow(), getPrevValue());
         metaInfoWriter.setMetaInfo(getRow(), getCol(), getPrevMetaInfo());
     }
 
