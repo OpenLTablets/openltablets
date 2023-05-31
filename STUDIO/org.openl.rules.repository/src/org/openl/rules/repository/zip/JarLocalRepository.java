@@ -3,20 +3,21 @@ package org.openl.rules.repository.zip;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 
+import org.openl.util.ClassUtils;
 import org.openl.util.FileUtils;
-import org.openl.util.RuntimeExceptionWrapper;
 
 /**
  * Read only implementation of Jar Repository to support deploying of jars from classpath as it is without
@@ -30,39 +31,39 @@ import org.openl.util.RuntimeExceptionWrapper;
  */
 public class JarLocalRepository extends AbstractArchiveRepository {
 
-    private static final String PROJECT_DESCRIPTOR_FILE = "rules.xml";
-    private static final String DEPLOYMENT_DESCRIPTOR_XML_FILE = "deployment.xml";
-    private static final String DEPLOYMENT_DESCRIPTOR_YAML_FILE = "deployment.yaml";
-
     private final PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 
     public void initialize() {
         final Map<String, Path> localStorage = new HashMap<>();
-        final Consumer<Resource> collector = res -> {
+        final Consumer<String> collector = urlString -> {
             try {
-                final URI uri = res.getURI();
-                final Path path = toPath(uri);
-                final String name = FileUtils.getBaseName(path.getFileName().toString());
+                URL a = new URL(urlString);
+                URI b = a.toURI();
+                FileSystem c = FileSystems.newFileSystem(b, Collections.emptyMap(), Thread.currentThread().getContextClassLoader());
+                final var path = c.getPath("/");
+                final var name = FileUtils.getBaseName(FileUtils.getName(urlString));
                 var existed = localStorage.put(name, path);
                 if (existed != null && !existed.equals(path)) {
                     throw new IllegalStateException(String.format("The resources '%s' and '%s' conflict for the same '%s' name.", existed, path, name));
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new IllegalStateException("Failed to initialize a repository.", e);
             }
         };
 
         try {
-            getResources(PROJECT_DESCRIPTOR_FILE).forEach(collector);
-            getResources(DEPLOYMENT_DESCRIPTOR_XML_FILE).forEach(collector);
-            getResources(DEPLOYMENT_DESCRIPTOR_YAML_FILE).forEach(collector);
-            Stream<Resource> archives;
+            getResources("rules.xml", collector);
+            getResources("deployment.xml", collector);
+            getResources("deployment.yaml", collector);
+            URL resource = ClassUtils.getCurrentClassLoader(getClass()).getResource("/openl/");
             try {
-                archives = Stream.of(resourceResolver.getResources("/openl/*.zip"));
-            } catch (FileNotFoundException ignored) {
-                archives = Stream.empty();// OK
+                var archives = resourceResolver.getResources("/openl/*.zip");
+                for (Resource res : archives) {
+                    collector.accept(res.getURL().toExternalForm());
+                }
+            } catch (FileNotFoundException ignore) {
+                // Nothing to add
             }
-            archives.forEach(collector);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to initialize a repository.", e);
         }
@@ -76,36 +77,12 @@ public class JarLocalRepository extends AbstractArchiveRepository {
         setRoot(root);
     }
 
-    private Stream<Resource> getResources(String fileName) throws IOException {
-        String locationPattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + fileName;
-        return Stream.of(resourceResolver.getResources(locationPattern));
-    }
-
-    private static Path toPath(URI uri) {
-        if ("jar".equals(uri.getScheme())) {
-            String path = uri.getRawSchemeSpecificPart();
-            int sep = path.indexOf("!/");
-            if (sep > -1) {
-                path = path.substring(0, sep);
-            }
-            try {
-                URI uriToZip = new URI(path);
-                if (uriToZip.getSchemeSpecificPart().contains("%")) {
-                    //FIXME workaround to fix double URI encoding for URIs from ZipPath
-                    try {
-                        uriToZip = new URI(uriToZip.getScheme() + ":" + uriToZip.getSchemeSpecificPart());
-                    } catch (URISyntaxException ignored) {
-                        //it's ok
-                    }
-                }
-                return Paths.get(uriToZip);
-            } catch (URISyntaxException e) {
-                throw RuntimeExceptionWrapper.wrap(e);
-            }
-        } else if ("file".equals(uri.getScheme())) {
-            return Paths.get(uri);
+    private void getResources(String fileName, Consumer<String> collector) throws IOException {
+        var urls = ClassUtils.getCurrentClassLoader(getClass()).getResources(fileName);
+        while (urls.hasMoreElements()) {
+            var url = urls.nextElement().toExternalForm();
+            collector.accept(url.substring(0, url.length() - fileName.length() - 2));
         }
-        throw new IllegalArgumentException("Invalid URI scheme.");
     }
 
 }
