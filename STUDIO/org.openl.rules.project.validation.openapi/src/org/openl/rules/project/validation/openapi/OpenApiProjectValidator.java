@@ -1468,6 +1468,7 @@ public class OpenApiProjectValidator {
             validatedBySchemasRef.add(key);
         }
         IOpenClass oldType = context.getType();
+        boolean oldTheSameTypeName = context.isTheSameTypeName();
         try {
             Schema<?> resolvedActualSchema = context.getActualOpenAPIResolver().resolve(actualSchema, Schema::get$ref);
             if (resolvedActualSchema != null) {
@@ -1507,6 +1508,9 @@ public class OpenApiProjectValidator {
                 }
 
                 context.setType(openClass);
+                context.setTheSameTypeName(
+                    expectedSchema != null && actualSchema != null && expectedSchema.get$ref() != null && actualSchema
+                        .get$ref() != null && Objects.equals(expectedSchema.get$ref(), actualSchema.get$ref()));
                 Map<String, Schema> propertiesOfExpectedSchema = null;
                 Map<String, Schema> propertiesOfActualSchema = null;
                 boolean parentPresentedInBothSchemas = false;
@@ -1547,7 +1551,6 @@ public class OpenApiProjectValidator {
                     }
                 }
                 if (!parentPresentedInBothSchemas) {
-                    context.setType(openClass);
                     propertiesOfExpectedSchema = context.getExpectedOpenAPIResolver()
                         .resolveAllProperties(resolvedExpectedSchema);
                     propertiesOfActualSchema = context.getActualOpenAPIResolver()
@@ -1694,6 +1697,7 @@ public class OpenApiProjectValidator {
             }
         } finally {
             context.setType(oldType);
+            context.setTheSameTypeName(oldTheSameTypeName);
         }
     }
 
