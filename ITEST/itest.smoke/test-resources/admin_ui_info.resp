@@ -79,6 +79,17 @@ Content-Type: application/json
       "urls": {
         "RESTFUL": "spring/spring"
       }
+    },
+    {
+      "startedTime": 1716296690325,
+      "name": "EPBDS-14246_DatatypeDescription_EPBDS-14246_DatatypeDescription",
+      "servicePath": "EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription",
+      "urls": {
+        "RESTFUL": "EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription"
+      },
+      "hasManifest": true,
+      "deploymentName": "EPBDS-14246_DatatypeDescription",
+      "status": "DEPLOYED"
     }
   ],
   "startedAt": "*",
