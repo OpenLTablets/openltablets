@@ -5,11 +5,11 @@ Content-Type: application/json
   "openapi" : "3.0.1",
   "info" : {
     "description" : "Auto-generated OpenAPI schema from the OpenL rules",
-    "title" : "EPBDS-14246_DatatypeDescription_EPBDS-14246_DatatypeDescription",
+    "title" : "openapi_EPBDS-14246",
     "version" : "1.0.0"
   },
   "servers" : [ {
-    "url" : "http://localhost:8080/webservice/EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription"
+    "url" : "*"
   } ],
   "paths" : {
     "/theCalc" : {

@@ -48,17 +48,6 @@ Content-Type: application/json
       "status": "DEPLOYED"
     },
     {
-      "deploymentName": "openapi",
-      "hasManifest": false,
-      "name": "openapi_openapi",
-      "servicePath": "openapi/openapi",
-      "startedTime": "#####",
-      "status": "DEPLOYED",
-      "urls": {
-        "RESTFUL": "openapi/openapi"
-      }
-    },
-    {
       "deploymentName": "simple",
       "hasManifest": false,
       "name": "simple_simple",
@@ -81,7 +70,7 @@ Content-Type: application/json
       }
     },
     {
-      "startedTime": 1716366718714,
+      "startedTime": "*",
       "name": "openapi_EPBDS-14246",
       "servicePath": "openapi/EPBDS-14246",
       "urls": {
@@ -89,8 +78,8 @@ Content-Type: application/json
       },
       "hasManifest": false,
       "deploymentName": "openapi",
-      "status": "DEPLOYED"
-    },
+	  "status": "DEPLOYED"
+    }
   ],
   "startedAt": "*",
   "startedMilli": "*",
