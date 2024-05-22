@@ -19,8 +19,8 @@ Content-Type: application/json
       "url": "spring/spring/openapi.json",
       "name": "spring"
     }, {
-      "name": "EPBDS-14246_DatatypeDescription_EPBDS-14246_DatatypeDescription",
-      "url": "EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription/openapi.json"
+      "name": "openapi_EPBDS-14246",
+      "url": "openapi/EPBDS-14246/openapi.json"
     }
   ]
 }
