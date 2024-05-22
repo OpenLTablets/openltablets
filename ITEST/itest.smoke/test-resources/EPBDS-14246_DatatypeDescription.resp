@@ -5,7 +5,7 @@ Content-Type: application/json
   "openapi" : "3.0.1",
   "info" : {
     "description" : "Auto-generated OpenAPI schema from the OpenL rules",
-    "title" : "openapi_EPBDS-14246",
+    "title" : "EPBDS-14246_EPBDS-14246",
     "version" : "1.0.0"
   },
   "servers" : [ {
