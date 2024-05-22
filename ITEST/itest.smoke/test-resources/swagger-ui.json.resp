@@ -21,6 +21,6 @@ Content-Type: application/json
     }, {
       "name": "EPBDS-14246_DatatypeDescription_EPBDS-14246_DatatypeDescription",
       "url": "EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription/openapi.json"
-    },
+    }
   ]
 }
