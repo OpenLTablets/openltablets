@@ -10,6 +10,10 @@ Content-Type: application/json
       "url": "no-xlsx/openapi.json",
       "name": "no-xlsx_service"
     }, {
+      "name": "openapi_EPBDS-14246",
+      "url": "openapi/EPBDS-14246/openapi.json"
+    }, 
+    {
       "url": "openapi/openapi/openapi.json",
       "name": "openapi_openapi"
     }, {
@@ -18,9 +22,6 @@ Content-Type: application/json
     }, {
       "url": "spring/spring/openapi.json",
       "name": "spring"
-    }, {
-      "name": "openapi_EPBDS-14246",
-      "url": "openapi/EPBDS-14246/openapi.json"
     }
   ]
 }

@@ -40,6 +40,16 @@ Content-Type: application/json
   "status": "DEPLOYED"
 }, {
   "startedTime": "#####",
+  "name": "openapi_EPBDS-14246",
+  "servicePath": "openapi/EPBDS-14246",
+  "urls": {
+      "RESTFUL": "openapi/EPBDS-14246"
+  },
+  "hasManifest": false,
+  "deploymentName": "openapi",
+  "status": "DEPLOYED"
+}, {
+  "startedTime": "#####",
   "name": "openapi_openapi",
   "servicePath": "openapi/openapi",
   "urls": {
@@ -67,17 +77,6 @@ Content-Type: application/json
   },
   "hasManifest": false,
   "deploymentName": "spring",
-  "status": "DEPLOYED"
-},
-{
-  "startedTime": "#####",
-  "name": "openapi_EPBDS-14246",
-  "servicePath": "openapi/EPBDS-14246",
-  "urls": {
-      "RESTFUL": "openapi/EPBDS-14246"
-  },
-  "hasManifest": false,
-  "deploymentName": "openapi",
   "status": "DEPLOYED"
 }
 ]
