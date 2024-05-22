@@ -81,16 +81,16 @@ Content-Type: application/json
       }
     },
     {
-      "startedTime": 1716296690325,
-      "name": "EPBDS-14246_DatatypeDescription_EPBDS-14246_DatatypeDescription",
-      "servicePath": "EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription",
+      "startedTime": 1716366718714,
+      "name": "openapi_EPBDS-14246",
+      "servicePath": "openapi/EPBDS-14246",
       "urls": {
-        "RESTFUL": "EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription"
+          "RESTFUL": "openapi/EPBDS-14246"
       },
-      "hasManifest": true,
-      "deploymentName": "EPBDS-14246_DatatypeDescription",
+      "hasManifest": false,
+      "deploymentName": "openapi",
       "status": "DEPLOYED"
-    }
+    },
   ],
   "startedAt": "*",
   "startedMilli": "*",
