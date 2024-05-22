@@ -10,8 +10,8 @@ Content-Type: application/json
       "url": "no-xlsx/openapi.json",
       "name": "no-xlsx_service"
     }, {
-      "name": "openapi_EPBDS-14246",
-      "url": "openapi/EPBDS-14246/openapi.json"
+      "name": "EPBDS-14246_EPBDS-14246",
+      "url": "EPBDS-14246/EPBDS-14246/openapi.json"
     }, 
     {
       "url": "openapi/openapi/openapi.json",
