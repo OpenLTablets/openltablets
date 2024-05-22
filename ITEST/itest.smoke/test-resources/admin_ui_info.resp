@@ -59,6 +59,17 @@ Content-Type: application/json
       "status": "DEPLOYED"
     },
     {
+        "startedTime": "#####",
+        "name": "openapi_openapi",
+        "servicePath": "openapi/openapi",
+        "urls": {
+            "RESTFUL": "openapi/openapi"
+        },
+        "hasManifest": false,
+        "deploymentName": "openapi",
+        "status": "DEPLOYED"
+    },
+    {
       "deploymentName": "simple",
       "hasManifest": false,
       "name": "simple_simple",

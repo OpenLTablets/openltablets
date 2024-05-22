@@ -1,2 +1,2 @@
-GET /openapi/EPBDS-14246/openapi.json HTTP/1.1
+GET /EPBDS-14246/EPBDS-14246/openapi.json HTTP/1.1
 
