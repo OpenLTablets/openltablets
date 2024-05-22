@@ -8,6 +8,17 @@ Content-Type: application/json
   "deployerEnabled": false,
   "services": [
     {
+      "startedTime": "*",
+      "name": "EPBDS-14246_EPBDS-14246",
+      "servicePath": "EPBDS-14246/EPBDS-14246",
+      "urls": {
+          "RESTFUL": "EPBDS-14246/EPBDS-14246"
+      },
+      "hasManifest": false,
+      "deploymentName": "EPBDS-14246",
+      "status": "DEPLOYED"
+    },
+    {
       "deploymentName": "multimodule",
       "hasManifest": false,
       "name": "multi_project_project1",
@@ -68,17 +79,6 @@ Content-Type: application/json
       "urls": {
         "RESTFUL": "spring/spring"
       }
-    },
-    {
-      "startedTime": "*",
-      "name": "openapi_EPBDS-14246",
-      "servicePath": "openapi/EPBDS-14246",
-      "urls": {
-          "RESTFUL": "openapi/EPBDS-14246"
-      },
-      "hasManifest": false,
-      "deploymentName": "openapi",
-	  "status": "DEPLOYED"
     }
   ],
   "startedAt": "*",
