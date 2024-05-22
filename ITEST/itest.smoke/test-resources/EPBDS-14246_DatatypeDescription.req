@@ -1,2 +1,2 @@
-GET /EPBDS-14246_DatatypeDescription/EPBDS-14246_DatatypeDescription/openapi.json HTTP/1.1
+GET /openapi/EPBDS-14246_DatatypeDescription/openapi.json HTTP/1.1
 
