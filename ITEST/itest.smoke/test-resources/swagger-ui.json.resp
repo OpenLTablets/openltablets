@@ -4,14 +4,15 @@ Content-Type: application/json
 {
   "urls": [
     {
+      "name": "EPBDS-14246_EPBDS-14246",
+      "url": "EPBDS-14246/EPBDS-14246/openapi.json"
+    }, 
+    {
       "url": "multi_project/project1/openapi.json",
       "name": "multi_project_project1"
     }, {
       "url": "no-xlsx/openapi.json",
       "name": "no-xlsx_service"
-    }, {
-      "name": "EPBDS-14246_EPBDS-14246",
-      "url": "EPBDS-14246/EPBDS-14246/openapi.json"
     }, 
     {
       "url": "openapi/openapi/openapi.json",
