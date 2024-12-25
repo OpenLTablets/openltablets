@@ -16,6 +16,7 @@ public abstract class RepositorySettings {
     private final String DEFAULT_COMMENT_COPIED_FROM;
     private final String DEFAULT_COMMENT_RESTORED_FROM;
     private final String BASE_PATH;
+    private final String DEPLOY_FROM_MAIN_BRANCH;
 
     private String commentValidationPattern;
     private String invalidCommentMessage;
@@ -33,6 +34,8 @@ public abstract class RepositorySettings {
 
     private boolean useCustomComments;
 
+    private boolean mainBranchOnly;
+
     RepositorySettings(PropertiesHolder propertyResolver, String configPrefix) {
         USE_CUSTOM_COMMENTS = configPrefix + ".comment-template.use-custom-comments";
         COMMENT_VALIDATION_PATTERN = configPrefix + ".comment-template.comment-validation-pattern";
@@ -47,6 +50,8 @@ public abstract class RepositorySettings {
         DEFAULT_COMMENT_COPIED_FROM = configPrefix + ".comment-template.user-message.default.copied-from";
         DEFAULT_COMMENT_RESTORED_FROM = configPrefix + ".comment-template.user-message.default.restored-from";
         BASE_PATH = configPrefix + ".base.path";
+
+        DEPLOY_FROM_MAIN_BRANCH = configPrefix + ".deploy-from-main-branch";
 
         load(propertyResolver);
     }
@@ -148,6 +153,14 @@ public abstract class RepositorySettings {
         this.defaultCommentRestoredFrom = defaultCommentRestoredFrom;
     }
 
+    public boolean isMainBranchOnly() {
+        return mainBranchOnly;
+    }
+
+    public void setMainBranchOnly(boolean mainBranchOnly) {
+        this.mainBranchOnly = mainBranchOnly;
+    }
+
     public String getBasePath() {
         return basePath;
     }
@@ -170,6 +183,8 @@ public abstract class RepositorySettings {
         defaultCommentCopiedFrom = properties.getProperty(DEFAULT_COMMENT_COPIED_FROM);
         defaultCommentRestoredFrom = properties.getProperty(DEFAULT_COMMENT_RESTORED_FROM);
 
+        mainBranchOnly = Boolean.parseBoolean(properties.getProperty(DEPLOY_FROM_MAIN_BRANCH));
+
         basePath = properties.getProperty(BASE_PATH);
     }
 
@@ -188,6 +203,8 @@ public abstract class RepositorySettings {
         propertiesHolder.setProperty(DEFAULT_COMMENT_ERASE, defaultCommentErase);
         propertiesHolder.setProperty(DEFAULT_COMMENT_COPIED_FROM, defaultCommentCopiedFrom);
         propertiesHolder.setProperty(DEFAULT_COMMENT_RESTORED_FROM, defaultCommentRestoredFrom);
+
+        propertiesHolder.setProperty(DEPLOY_FROM_MAIN_BRANCH, mainBranchOnly);
     }
 
     protected void revert(PropertiesHolder properties) {

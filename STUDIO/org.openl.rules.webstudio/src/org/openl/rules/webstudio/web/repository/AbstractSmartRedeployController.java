@@ -365,20 +365,7 @@ public abstract class AbstractSmartRedeployController {
             return UiConst.OUTCOME_FAILURE;
         }
 
-        List<ADeploymentProject> toDeploy = new LinkedList<>();
-        // update selected deployment projects
-        List<DeploymentProjectItem> projectItems = getItems();
-        for (DeploymentProjectItem item : projectItems) {
-            if (!item.isSelected()) {
-                continue;
-            }
-
-            ADeploymentProject deploymentProject = update(item.getName(), currentProject);
-            if (deploymentProject != null && item.isCanDeploy()) {
-                // OK, it was updated
-                toDeploy.add(deploymentProject);
-            }
-        }
+        List<ADeploymentProject> toDeploy = getDeploymentProjects();
 
         // redeploy takes more time
         String repositoryName = getRepositoryName(repositoryConfigName);
@@ -404,6 +391,27 @@ public abstract class AbstractSmartRedeployController {
         productionRepositoriesTreeController.refreshTree();
 
         return UiConst.OUTCOME_SUCCESS;
+    }
+
+    private List<ADeploymentProject> getDeploymentProjects() {
+        List<ADeploymentProject> toDeploy = new LinkedList<>();
+        // update selected deployment projects
+        List<DeploymentProjectItem> projectItems = getItems();
+        if (projectItems == null) {
+            return toDeploy;
+        }
+        for (DeploymentProjectItem item : projectItems) {
+            if (!item.isSelected()) {
+                continue;
+            }
+
+            ADeploymentProject deploymentProject = update(item.getName(), currentProject);
+            if (deploymentProject != null && item.isCanDeploy()) {
+                // OK, it was updated
+                toDeploy.add(deploymentProject);
+            }
+        }
+        return toDeploy;
     }
 
     protected String getRepositoryName(String repositoryConfigName) {
@@ -554,6 +562,10 @@ public abstract class AbstractSmartRedeployController {
                 items = null;
             }
         }
+    }
+
+    public String getValidBranch() {
+        return deploymentManager.validateOnMainBranch(getDeploymentProjects(), repositoryConfigName);
     }
 
     public Collection<RepositoryConfiguration> getRepositories() {
