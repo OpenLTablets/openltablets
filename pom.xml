@@ -91,7 +91,7 @@
         <!-- Bytecode manipulation -->
         <asm.version>9.7.1</asm.version>
         <byte-buddy.version>1.15.11</byte-buddy.version>
-        <cloning.version>1.11.1</cloning.version>
+        <cloning.version>1.12.1</cloning.version>
         <objenesis.version>3.4</objenesis.version>
 
         <!-- Kafka -->
@@ -132,9 +132,9 @@
         <jetty.version>10.0.24</jetty.version>
 
         <!-- Repositories -->
-        <amazonaws.version>2.29.44</amazonaws.version>
+        <amazonaws.version>2.29.51</amazonaws.version>
         <azure.version>12.29.0</azure.version>
-        <netty.version>4.1.116.Final</netty.version>
+        <netty.version>4.1.117.Final</netty.version>
         <jgit.version>6.9.0.202403050737-openl</jgit.version>
 
         <!-- DB -->
@@ -153,7 +153,7 @@
         <xmlunit.version>2.10.0</xmlunit.version>
         <testcontainers.version>1.20.4</testcontainers.version>
         <testcontainers.keycloak.version>2.6.0</testcontainers.keycloak.version>
-        <minio.version>8.5.14</minio.version>
+        <minio.version>8.5.15</minio.version>
         <oracle.version>23.6.0.24.10</oracle.version>
         <postgresql.version>42.7.4</postgresql.version>
         <mariadb.version>2.7.12</mariadb.version>
@@ -178,7 +178,7 @@
         <greenmail.version>1.6.15</greenmail.version>
 
         <!-- Commons and utils -->
-        <commons.codec.version>1.17.1</commons.codec.version>
+        <commons.codec.version>1.17.2</commons.codec.version>
         <commons.compress.version>1.27.1</commons.compress.version>
         <commons.collections4.version>4.4</commons.collections4.version>
         <commons.io.version>2.18.0</commons.io.version>
@@ -191,7 +191,7 @@
 
         <bouncycastle.version>1.79</bouncycastle.version>
         <groovy.version>4.0.24</groovy.version>
-        <poi.version>5.3.0</poi.version>
+        <poi.version>5.4.0</poi.version>
         <aspectj.version>1.9.22.1</aspectj.version>
         <velocity.version>2.4.1</velocity.version>
         <guava.version>33.4.0-jre</guava.version>
