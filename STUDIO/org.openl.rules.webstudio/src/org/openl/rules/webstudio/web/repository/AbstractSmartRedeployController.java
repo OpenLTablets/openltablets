@@ -87,6 +87,8 @@ public abstract class AbstractSmartRedeployController {
 
     AProject currentProject;
 
+    private String deployComment;
+
     public void setUserWorkspace(UserWorkspace userWorkspace) {
         this.userWorkspace = userWorkspace;
     }
@@ -372,7 +374,7 @@ public abstract class AbstractSmartRedeployController {
 
         for (ADeploymentProject deploymentProject : toDeploy) {
             try {
-                DeployID id = deploymentManager.deploy(deploymentProject, repositoryConfigName);
+                DeployID id = deploymentManager.deploy(deploymentProject, repositoryConfigName, deployComment);
                 String message = String.format("Project '%s' is successfully deployed with id '%s' to repository '%s'.",
                         currentProject.getBusinessName(),
                         id.getName(),
@@ -654,4 +656,11 @@ public abstract class AbstractSmartRedeployController {
         return false;
     }
 
+    public String getDeployComment() {
+        return deployComment;
+    }
+
+    public void setDeployComment(String deployComment) {
+        this.deployComment = deployComment;
+    }
 }
