@@ -22,6 +22,8 @@ wget  --progress=dot:giga -O opentelemetry-javaagent.jar.asc "https://repo1.mave
 gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 17A27CE7A60FF5F0
 gpg --batch --verify opentelemetry-javaagent.jar.asc opentelemetry-javaagent.jar
 
+wget https://repo1.maven.org/maven2/jakarta/activation/jakarta.activation-api/2.1.3/jakarta.activation-api-2.1.3.jar
+
 # Remove tools
 apk del wget gnupg
 EOT
@@ -133,6 +135,7 @@ EXPOSE 8080
 
 COPY $OTEL_APP $OTEL_DIR
 COPY $APP $OPENL_APP/webapps/ROOT
+COPY --from=otel jakarta.activation-api-2.1.3.jar $OPENL_APP/webapps/ROOT/WEB-INF/lib/
 
 WORKDIR $OPENL_DIR
 
