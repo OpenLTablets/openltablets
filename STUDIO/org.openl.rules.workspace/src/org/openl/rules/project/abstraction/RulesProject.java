@@ -1,8 +1,10 @@
 package org.openl.rules.project.abstraction;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ public class RulesProject extends UserWorkspaceProject {
     private Repository designRepository;
     private String designFolderName;
     private final LockEngine lockEngine;
+    private final ProjectTags projectTags;
 
     public RulesProject(WorkspaceUser user,
                         LocalRepository localRepository,
@@ -82,6 +85,7 @@ public class RulesProject extends UserWorkspaceProject {
         if (designFileData != null) {
             setLastHistoryVersion(designFileData.getVersion());
         }
+        projectTags = new ProjectTags(this);
     }
 
     @Override
@@ -593,5 +597,9 @@ public class RulesProject extends UserWorkspaceProject {
             folderPath = ((FolderMapper) repository).getBusinessName(folderPath);
         }
         return folderPath.substring(folderPath.lastIndexOf('/') + 1);
+    }
+    
+    public ProjectTags getTags() {
+        return projectTags;
     }
 }

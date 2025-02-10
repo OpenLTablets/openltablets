@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -35,14 +37,12 @@ import org.openl.rules.project.abstraction.UserWorkspaceProject;
 import org.openl.rules.project.resolving.ProjectDescriptorArtefactResolver;
 import org.openl.rules.repository.api.BranchRepository;
 import org.openl.rules.repository.api.Repository;
-import org.openl.rules.security.standalone.persistence.OpenLProject;
 import org.openl.rules.security.standalone.persistence.ProjectGrouping;
 import org.openl.rules.security.standalone.persistence.Tag;
 import org.openl.rules.security.standalone.persistence.TagType;
 import org.openl.rules.webstudio.filter.AllFilter;
 import org.openl.rules.webstudio.filter.IFilter;
 import org.openl.rules.webstudio.security.CurrentUserInfo;
-import org.openl.rules.webstudio.service.OpenLProjectService;
 import org.openl.rules.webstudio.service.ProjectGroupingService;
 import org.openl.rules.webstudio.service.TagService;
 import org.openl.rules.webstudio.service.TagTypeService;
@@ -90,9 +90,6 @@ public class RepositoryTreeState implements DesignTimeRepositoryListener {
 
     @Autowired
     private ProjectGroupingService projectGroupingService;
-
-    @Autowired
-    private OpenLProjectService projectService;
 
     @Autowired
     private RepositoryAclServiceProvider aclServiceProvider;
@@ -194,7 +191,6 @@ public class RepositoryTreeState implements DesignTimeRepositoryListener {
                                     tagService,
                                     hideDeleted,
                                     projectDescriptorResolver,
-                                    projectService,
                                     repositories));
 
                             withoutRepo.removeAll(subProjects);
@@ -215,12 +211,13 @@ public class RepositoryTreeState implements DesignTimeRepositoryListener {
                         final String name = tag.getName();
                         final String id = RepositoryUtils.getTreeNodeId(name);
 
-                        final List<OpenLProject> projectsForTags = projectService.getProjectsForTag(tag.getId());
+                        final String tagType = tag.getType().getName();
 
                         final List<RulesProject> subProjects = rulesProjects.stream()
-                                .filter(project -> (projectsForTags.stream()
-                                        .anyMatch(p -> (p.getProjectPath().equals(project.getRealPath()) && p.getRepositoryId()
-                                                .equals(project.getRepository().getId())))))
+                                .filter(project -> {
+                                    Map<String, String> designTags = project.getTags().getDesignTags();
+                                    return designTags.containsKey(tagType) && Objects.equals(designTags.get(tagType), name);
+                                })
                                 .collect(Collectors.toList());
 
                         if (!subProjects.isEmpty()) {
@@ -232,7 +229,6 @@ public class RepositoryTreeState implements DesignTimeRepositoryListener {
                                     tagService,
                                     hideDeleted,
                                     projectDescriptorResolver,
-                                    projectService,
                                     repositories));
 
                             withoutTags.removeAll(subProjects);
@@ -1074,10 +1070,14 @@ public class RepositoryTreeState implements DesignTimeRepositoryListener {
 
     public boolean getCanModifyTags() {
         UserWorkspaceProject project = getSelectedProject();
-        var repositoryAclService = project instanceof ADeploymentProject
-                ? aclServiceProvider.getDeployConfigRepoAclService()
-                : aclServiceProvider.getDesignRepoAclService();
-        return repositoryAclService.isGranted(project, List.of(AclPermission.EDIT));
+        if (project.isOpened()) {
+            var repositoryAclService = project instanceof ADeploymentProject
+                    ? aclServiceProvider.getDeployConfigRepoAclService()
+                    : aclServiceProvider.getDesignRepoAclService();
+            return repositoryAclService.isGranted(project, List.of(AclPermission.EDIT));
+        } else {
+            return false;
+        }
     }
 
     public boolean getCanAppend() {
