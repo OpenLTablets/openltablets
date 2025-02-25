@@ -1,5 +1,6 @@
 package org.openl.rules.rest;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.openl.config.InMemoryProperties;
 import org.openl.rules.rest.exception.ConflictException;
 import org.openl.rules.rest.model.GroupSettingsModel;
 import org.openl.rules.rest.validation.BeanValidationProvider;
@@ -39,6 +40,7 @@ import org.openl.rules.webstudio.service.GroupManagementService;
 import org.openl.security.acl.JdbcMutableAclService;
 import org.openl.security.acl.permission.AclRole;
 import org.openl.security.acl.repository.RepositoryAclServiceProvider;
+import org.openl.spring.env.DynamicPropertySource;
 import org.openl.util.StreamUtils;
 import org.openl.util.StringUtils;
 
@@ -54,25 +56,24 @@ public class ManagementController {
 
     private static final String SECURITY_DEF_GROUP_PROP = "security.default-group";
 
+    private final Environment environment;
     private final GroupDao groupDao;
     private final GroupManagementService groupManagementService;
-    private final InMemoryProperties properties;
     private final BeanValidationProvider validationProvider;
     private final ExternalGroupService extGroupService;
     private final JdbcMutableAclService aclService;
     private final RepositoryAclServiceProvider aclServiceProvider;
 
     @Autowired
-    public ManagementController(GroupDao groupDao,
+    public ManagementController(Environment environment, GroupDao groupDao,
                                 GroupManagementService groupManagementService,
-                                InMemoryProperties properties,
                                 BeanValidationProvider validationProvider,
                                 ExternalGroupService extGroupService,
                                 @Autowired(required = false) JdbcMutableAclService aclService,
                                 RepositoryAclServiceProvider aclServiceProvider) {
+        this.environment = environment;
         this.groupDao = groupDao;
         this.groupManagementService = groupManagementService;
-        this.properties = properties;
         this.validationProvider = validationProvider;
         this.extGroupService = extGroupService;
         this.aclService = aclService;
@@ -205,16 +206,16 @@ public class ManagementController {
     @PostMapping(value = "/groups/settings", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @AdminPrivilege
-    public void saveSettings(@RequestBody GroupSettingsModel request) {
+    public void saveSettings(@RequestBody GroupSettingsModel request) throws IOException {
         validationProvider.validate(request);
-        properties.setProperty(SECURITY_DEF_GROUP_PROP, request.getDefaultGroup());
+        DynamicPropertySource.get().save(Map.of(SECURITY_DEF_GROUP_PROP, request.getDefaultGroup()));
     }
 
     @Operation(description = "mgmt.get-settings.desc", summary = "mgmt.get-settings.summary")
     @GetMapping("/groups/settings")
     public GroupSettingsModel getSettings() {
         GroupSettingsModel model = new GroupSettingsModel();
-        model.setDefaultGroup(properties.getProperty(SECURITY_DEF_GROUP_PROP));
+        model.setDefaultGroup(environment.getProperty(SECURITY_DEF_GROUP_PROP));
         return model;
     }
 
